@@ -7,12 +7,17 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 
 
+//traverse through dir's contents with readdir, print if it's type dir
+//-------------------------------------------------------
 void directories(DIR * curr) {
   printf("directories in dir: \n");
+
   struct dirent * stats;
   char type;
+
   stats = readdir(curr);
   while (stats) {
     type = (*stats).d_type;
@@ -23,20 +28,35 @@ void directories(DIR * curr) {
   }
 }
 
+//traverse through dir's contents with readdir, print if it's type reg
+//add file's size using stat(char *, struct stat *) 
+//-------------------------------------------------------
 void regs(DIR * curr) {
   printf("reg files in dir: \n");
+
   struct dirent * stats;
+  struct stat sb;
   char type;
+  char * name;
+  int size;
+  
   stats = readdir(curr);
   while (stats) {
     type = (*stats).d_type;
     if (type == DT_REG) {
-      printf("\t%s\n", (*stats).d_name);
+      name = (*stats).d_name;
+      printf("\t%s\n", name);
+      stat(name, &sb);
+      size += sb.st_size;
     }
     stats = readdir(curr);
   }
+  printf("Size of regular files: %d bits\n\n", size);
 }
 
+
+//open and close dirs with path
+//-------------------------------------------------------
 void scan(char * path) {
   DIR * curr;
   //look for dirs
