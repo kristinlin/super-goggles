@@ -51,7 +51,7 @@ void regs(DIR * curr) {
     }
     stats = readdir(curr);
   }
-  printf("Size of regular files: %d bits\n\n", size);
+  printf("Size of regular files: %d B\n\n", size);
 }
 
 
